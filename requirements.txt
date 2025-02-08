@@ -1,0 +1,7 @@
+flask
+gunicorn
+pymysql
+openai
+requests
+flask-cors
+
