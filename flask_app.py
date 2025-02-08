@@ -9,10 +9,10 @@ CORS(app)
 
 # 🔹 MySQL Database Configuration
 DB_CONFIG = {
-    "host": "sql107.infinityfree.com",  # ✅ Use your remote MySQL host
-    "user": "if0_38267837",
-    "password": "PjTRAcATLTR",
-    "database": "if0_38267837_sms"
+    "host": "srv1700.hstgr.io",  # ✅ Use your remote MySQL host
+    "user": "u314987953_sms",
+    "password": "Lt>Z$TV1$",
+    "database": "u314987953_sms"
 }
 
 # 🔹 OpenAI API Key (Keep it Secure)
