@@ -16,7 +16,7 @@ DB_CONFIG = {
 }
 
 # 🔹 OpenAI API Key (For Testing)
-openai.api_key = "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"
+openai.api_key = "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"
 
 # 🔹 Connect to MySQL Database
 def get_db_connection():
