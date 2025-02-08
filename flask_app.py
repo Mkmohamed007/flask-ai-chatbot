@@ -9,10 +9,10 @@ CORS(app)
 
 # 🔹 MySQL Database Configuration
 DB_CONFIG = {
-    "host": "localhost",  # Change to your MySQL server IP or localhost
-    "user": "admin",
-    "password": "1111",
-    "database": "sms"
+    "host": "sql107.infinityfree.com",  # Change to your MySQL server IP or localhost
+    "user": "if0_38267837",
+    "password": "PjTRAcATLTR",
+    "database": "if0_38267837_sms"
 }
 
 # 🔹 OpenAI API Key (Temporarily Hardcoded)
