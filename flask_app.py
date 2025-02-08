@@ -7,16 +7,16 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# 🔹 MySQL Database Configuration
+# 🔹 MySQL Database Configuration (For Testing)
 DB_CONFIG = {
-    "host": "srv1700.hstgr.io",  # ✅ Use your remote MySQL host
+    "host": "srv1700.hstgr.io",  # ✅ Your cPanel MySQL Host
     "user": "u314987953_sms",
     "password": "Lt>Z$TV1$",
     "database": "u314987953_sms"
 }
 
-# 🔹 OpenAI API Key (Keep it Secure)
-client = openai.OpenAI(api_key="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")
+# 🔹 OpenAI API Key (For Testing)
+openai.api_key = "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"
 
 # 🔹 Connect to MySQL Database
 def get_db_connection():
@@ -53,10 +53,12 @@ def fetch_all_data():
             cursor.execute(f"SELECT * FROM {table} LIMIT 10")  # ✅ Reduced limit for faster response
             database_data[table] = cursor.fetchall()
 
-        conn.close()
         return database_data
     except Exception as e:
         return {"error": str(e)}
+    finally:
+        if conn:
+            conn.close()  # ✅ Ensure connection is closed properly
 
 # 🔹 AI Chat Endpoint
 @app.route('/chat', methods=['POST'])
@@ -78,8 +80,10 @@ def chat():
     if "error" in database_data:
         return jsonify({"success": False, "error": database_data["error"]})
 
-    # Format data for AI
-    formatted_data = "\n".join([f"{table}: {data}" for table, data in database_data.items()])
+    # ✅ Fix: Format data properly for OpenAI
+    formatted_data = "\n".join(
+        [f"Table {table}:\n" + "\n".join([str(row) for row in data]) for table, data in database_data.items()]
+    )
 
     # Construct AI prompt
     chat_prompt = f"""
@@ -94,7 +98,7 @@ def chat():
 
     # Send request to OpenAI
     try:
-        response = client.chat.completions.create(  # ✅ Corrected OpenAI API call
+        response = openai.ChatCompletion.create(  # ✅ Fixed OpenAI API call
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are an AI assistant with access to a MySQL database."},
@@ -102,7 +106,7 @@ def chat():
             ]
         )
 
-        ai_response = response.choices[0].message.content  # ✅ Corrected response extraction
+        ai_response = response["choices"][0]["message"]["content"]  # ✅ Corrected response extraction
         return jsonify({"success": True, "response": ai_response})
 
     except Exception as e:
