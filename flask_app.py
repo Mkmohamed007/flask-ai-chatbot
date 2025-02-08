@@ -98,7 +98,7 @@ def chat():
 
     # Send request to OpenAI
     try:
-        response = openai.ChatCompletion.create(  # ✅ Fixed OpenAI API call
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are an AI assistant with access to a MySQL database."},
