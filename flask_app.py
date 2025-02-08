@@ -54,20 +54,21 @@ def fetch_all_data():
 @app.route('/chat', methods=['POST'])
 def chat():
     """Processes user queries using AI with database context."""
-    user_prompt = request.json.get("prompt")
+    data = request.get_json()  # Get JSON data from request
+    user_prompt = data.get("prompt", "").strip()  # Extract 'prompt' field
 
     if not user_prompt:
         return jsonify({"success": False, "error": "No prompt provided."})
 
-    # Fetch all database data
+    # Fetch database data
     database_data = fetch_all_data()
     if "error" in database_data:
         return jsonify({"success": False, "error": database_data["error"]})
 
-    # Format data for OpenAI
+    # Format data for AI
     formatted_data = "\n".join([f"{table}: {data}" for table, data in database_data.items()])
 
-    # Construct AI Prompt
+    # Construct AI prompt
     chat_prompt = f"""
     You are an AI assistant with access to the following database:
 
@@ -78,22 +79,21 @@ def chat():
     Provide a relevant and helpful response based on the database data.
     """
 
-    # ✅ Send request to OpenAI (Fixed for OpenAI 1.61.1)
+    # Send request to OpenAI
     try:
-        response = client.chat.completions.create(  # ✅ Correct OpenAI API Call
-model="gpt-4o-mini",
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # Ensure you are using a valid model
             messages=[
                 {"role": "system", "content": "You are an AI assistant with access to a MySQL database."},
                 {"role": "user", "content": chat_prompt}
             ]
         )
 
-        ai_response = response.choices[0].message.content  # ✅ Corrected Response Extraction
-        return jsonify({"success": True, "response": ai_response})  # ✅ Correct Indentation
+        ai_response = response["choices"][0]["message"]["content"]
+        return jsonify({"success": True, "response": ai_response})
 
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
-
 
 # 🔹 Flask Home Route
 @app.route('/', methods=['GET'])
