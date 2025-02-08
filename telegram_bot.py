@@ -6,7 +6,7 @@ TELEGRAM_BOT_TOKEN = "7624616543:AAEXQz1yLhNrgh4oOZmf5sUN4HyqmGldICo"
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
 # 🔹 Replace with your Flask API URL
-FLASK_API_URL = "http://127.0.0.1:5001/chat"  # Change this if hosted online
+FLASK_API_URL = "https://flask-ai-chatbot-c1zz.onrender.com/chat"  # Change this if hosted online
 
 # 🔹 Function to send message to Flask AI Chatbot
 def get_ai_response(user_prompt):
